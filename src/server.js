@@ -56,15 +56,15 @@ async function initializeDatabase() {
 
     // // Seed History data
     // const histories = [
-    //   { title: 'Auto Gymkhana Taiwan Grand Prix (Taipei)', description: 'Funding the Asia Gymkhana Working Group (Taipei)', year: 2005, imageUrl: 'http://localhost:5001/uploads/history/1751038068008-803691871.jpg', isActive: true, order: 1 },
-    //   { title: 'Indonesia Auto Gymkhana Championship', description: 'First Indonesia Auto Gymkhana Championship.', year: 2006, imageUrl: 'http://localhost:5001/uploads/history/1751038198170-753154758.jpg', isActive: true, order: 2 },
-    //   { title: 'Taiwan Auto Gymkhana Championship', description: 'First Taiwan Auto Gymkhana Championship in Taichung.', year: 2016, imageUrl: 'http://localhost:5001/uploads/history/1751038240799-426119134.jpg', isActive: true, order: 3 },
-    //   { title: 'Asia Auto Gymkhana Competition in 4 Countries', description: 'Asia Auto Gymkhana competition officially begins as a four-round series across Indonesia, Korea, Taiwan, and Thailand.', year: 2017, imageUrl: 'http://localhost:5001/uploads/history/1751038274602-606194641.jpg', isActive: true, order: 4 },
-    //   { title: 'FIA recognited Auto Gymkhana as slalom', description: 'Asia Auto Gymkhana competition in 4 countries recognized as FIA Auto Slalom World Championship.', year: 2018, imageUrl: 'http://localhost:5001/uploads/history/1751038312513-986279969.jpg', isActive: true, order: 5 },
-    //   { title: 'Asia Auto Gymkhana Competition in 3 Countries', description: '1st Taipei International Gymkhana Prize (Taipei).', year: 2019, imageUrl: 'http://localhost:5001/uploads/history/1751038341937-10420608.jpg', isActive: true, order: 6 },
-    //   { title: '2nd FIA Motor Sport Games - Auto Slalom World Championship (Marseilles)', description: '2nd Taipei International Gymkhana Prize (Taipei).', year: 2022, imageUrl: 'http://localhost:5001/uploads/history/1751038377796-144633992.jpg', isActive: true, order: 7 },
-    //   { title: '2nd Taipei International Gymkhana Prize (Taipei)', description: 'Asia Auto Gymkhana competition in 2 countries recognized as FIA Auto Slalom World Championship.', year: 2024, imageUrl: 'http://localhost:5001/uploads/history/1751038414014-222074404.jpg', isActive: true, order: 8 },
-    //   { title: 'Asia Auto Gymkhana competition in 5 countries', description: 'Asia Auto Gymkhana competition in 5 countries.', year: 2025, imageUrl: 'http://localhost:5001/uploads/history/1751038442679-110128404.jpg', isActive: true, order: 9 }
+    //   { title: 'Auto Gymkhana Taiwan Grand Prix (Taipei)', description: 'Funding the Asia Gymkhana Working Group (Taipei)', year: 2005, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038068008-803691871.jpg', isActive: true, order: 1 },
+    //   { title: 'Indonesia Auto Gymkhana Championship', description: 'First Indonesia Auto Gymkhana Championship.', year: 2006, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038198170-753154758.jpg', isActive: true, order: 2 },
+    //   { title: 'Taiwan Auto Gymkhana Championship', description: 'First Taiwan Auto Gymkhana Championship in Taichung.', year: 2016, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038240799-426119134.jpg', isActive: true, order: 3 },
+    //   { title: 'Asia Auto Gymkhana Competition in 4 Countries', description: 'Asia Auto Gymkhana competition officially begins as a four-round series across Indonesia, Korea, Taiwan, and Thailand.', year: 2017, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038274602-606194641.jpg', isActive: true, order: 4 },
+    //   { title: 'FIA recognited Auto Gymkhana as slalom', description: 'Asia Auto Gymkhana competition in 4 countries recognized as FIA Auto Slalom World Championship.', year: 2018, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038312513-986279969.jpg', isActive: true, order: 5 },
+    //   { title: 'Asia Auto Gymkhana Competition in 3 Countries', description: '1st Taipei International Gymkhana Prize (Taipei).', year: 2019, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038341937-10420608.jpg', isActive: true, order: 6 },
+    //   { title: '2nd FIA Motor Sport Games - Auto Slalom World Championship (Marseilles)', description: '2nd Taipei International Gymkhana Prize (Taipei).', year: 2022, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038377796-144633992.jpg', isActive: true, order: 7 },
+    //   { title: '2nd Taipei International Gymkhana Prize (Taipei)', description: 'Asia Auto Gymkhana competition in 2 countries recognized as FIA Auto Slalom World Championship.', year: 2024, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038414014-222074404.jpg', isActive: true, order: 8 },
+    //   { title: 'Asia Auto Gymkhana competition in 5 countries', description: 'Asia Auto Gymkhana competition in 5 countries.', year: 2025, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038442679-110128404.jpg', isActive: true, order: 9 }
     // ];
     
     // await History.bulkCreate(histories);
@@ -99,7 +99,7 @@ initializeDatabase();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3003','http://localhost:3001','http://localhost:3000','https://gmk.chronopulse.com'],
+  origin: ['http://localhost:3003','http://localhost:3001','http://localhost:3000','https://gmk.chronopulse.com','https://gmk-web-api.chronopulse.com','https://admingmk.chronopulse.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
