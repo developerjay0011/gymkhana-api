@@ -22,12 +22,22 @@ const createStorage = (type) => {
   });
 };
 
-// File filter for images
+// File filter for images and PDFs
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
+  if (file.fieldname === 'document') {
+    // For regulations, allow PDFs
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Not a PDF! Please upload a PDF file.'), false);
+    }
   } else {
-    cb(new Error('Not an image! Please upload an image.'), false);
+    // For images, allow image types
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Not an image! Please upload an image.'), false);
+    }
   }
 };
 
@@ -46,6 +56,7 @@ const newsUpload = createUpload('news');
 const eventsUpload = createUpload('events');
 const galleryUpload = createUpload('gallery');
 const historyUpload = createUpload('history');
+const regulationsUpload = createUpload('regulations');
 
 // Helper function to get full URL
 const getFullUrl = (req, path) => {
@@ -56,6 +67,7 @@ module.exports = {
   sliderUpload,
   newsUpload,
   eventsUpload,
+  regulationsUpload,
   galleryUpload,
   historyUpload,
   getFullUrl

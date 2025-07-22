@@ -17,8 +17,8 @@ async function initializeDatabase() {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
     
-    // Force sync all models
-    // await sequelize.sync({ force: true });
+    // // Sync all models
+    // await sequelize.sync();
     // console.log('Database tables have been synchronized');
 
     // Create default admin user
@@ -127,6 +127,7 @@ const newsRoutes = require('./routes/newsRoutes');
 const historyRoutes = require('./routes/historyRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const regulationRoutes = require('./routes/regulationRoutes');
 
 // API routes
 app.use('/api/users', userRoutes);
@@ -141,6 +142,7 @@ app.use('/api/slider', sliderRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/regulations', regulationRoutes);
 
 // Error handling middleware
 app.use(notFound);
