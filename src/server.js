@@ -17,9 +17,25 @@ async function initializeDatabase() {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
     
-    // // Sync all models
-    // await sequelize.sync();
-    // console.log('Database tables have been synchronized');
+    // Instead of using alter:true which causes syntax errors in MSSQL,
+    // we'll use direct SQL queries to add the missing columns
+    // try {
+      // Add deputy_director column to abouts table if it doesn't exist
+    //   await sequelize.query(
+    //     `IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'abouts' AND COLUMN_NAME = 'deputy_director')
+    //     ALTER TABLE [abouts] ADD [deputy_director] NVARCHAR(255) NULL;`
+    //   );
+      
+    //   // Add end_date column to events table if it doesn't exist
+    //   await sequelize.query(
+    //     `IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'events' AND COLUMN_NAME = 'end_date')
+    //     ALTER TABLE [events] ADD [end_date] DATETIME NULL;`
+    //   );
+      
+    //   console.log('Database tables have been updated with new columns');
+    // } catch (error) {
+    //   console.error('Error updating database schema:', error);
+    // }
 
     // Create default admin user
     // const { User, About, Contact, History, Slider, WhatIsGymkhana } = require('./models');
@@ -40,17 +56,34 @@ async function initializeDatabase() {
     //   organization: 'AAGC is managed by the Asia Gymkhana Working Group (GWG), established in 2005. ASNs from Asia-Pacific can nominate delegates to the GWG.',
     //   coordinator: 'Dr. Kwong Wing YEUNG',
     //   director: 'Samir Suneja',
+    //   deputy_director: 'Chien Siang NG',
     //   assistant: 'Chien Siang NG',
     //   isActive: true
     // });
     // console.log('About data seeded');
-
+    // await Contact.update({
+    //   email: 'info@storeindia.live',
+    //   phone: '7984810153',
+    //   address: '302, Shyam Market, maninagar , kadodara',
+    //   socialMedia: '{}',
+    //   mapLocation: '302, Shyam Market, maninagar , kadodara',
+    //   map: '302, Shyam Market, maninagar , kadodara',
+    //   mapUrl: '302, Shyam Market, maninagar , kadodara',
+    //   locationMap: '302, Shyam Market, maninagar , kadodara',
+    //   googleMap: '302, Shyam Market, maninagar , kadodara',
+    // }, { where: { id: 1 } });
     // // Seed Contact data
+    // Contact.destroy({ where: { id: 2 } });
     // await Contact.create({
     //   email: 'info@storeindia.live',
     //   phone: '7984810153',
     //   address: '302, Shyam Market, maninagar , kadodara',
-    //   socialMedia: '{}'
+    //   socialMedia: '{}',
+    //   mapLocation: '302, Shyam Market, maninagar , kadodara',
+    //   map: '302, Shyam Market, maninagar , kadodara',
+    //   mapUrl: '302, Shyam Market, maninagar , kadodara',
+    //   locationMap: '302, Shyam Market, maninagar , kadodara',
+    //   googleMap: '302, Shyam Market, maninagar , kadodara',
     // });
     // console.log('Contact data seeded');
 
@@ -128,6 +161,7 @@ const historyRoutes = require('./routes/historyRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const regulationRoutes = require('./routes/regulationRoutes');
+const championshipStatsRoutes = require('./routes/championshipStatsRoutes');
 
 // API routes
 app.use('/api/users', userRoutes);
@@ -143,6 +177,7 @@ app.use('/api/news', newsRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/regulations', regulationRoutes);
+app.use('/api/championship-stats', championshipStatsRoutes);
 
 // Error handling middleware
 app.use(notFound);

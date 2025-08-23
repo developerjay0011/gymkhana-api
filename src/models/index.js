@@ -35,6 +35,10 @@ const About = sequelize.define('About', {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
+  deputy_director: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
@@ -42,6 +46,34 @@ const About = sequelize.define('About', {
 }, {
   tableName: 'abouts',
   underscored: true
+});
+
+// Championship Statistics
+const ChampionshipStats = sequelize.define('ChampionshipStats', {
+  competitors: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  countries: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  events: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  champions: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+}, {
+  tableName: 'championship_stats',
+  underscored: true,
+  timestamps: false,
 });
 
 const Contact = sequelize.define('Contact', {
@@ -60,7 +92,27 @@ const Contact = sequelize.define('Contact', {
   socialMedia: {
     type: DataTypes.STRING(1000),
     allowNull: true,
-  }
+  },
+  mapLocation: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  map: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  mapUrl: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  locationMap: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  googleMap: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
 }, { 
   timestamps: false,
 });
@@ -197,8 +249,12 @@ const Event = sequelize.define('Event', {
     allowNull: false,
   },
   date: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING(10), // YYYY-MM-DD format
     allowNull: false,
+  },
+  endDate: {
+    type: DataTypes.STRING(10), // YYYY-MM-DD format
+    allowNull: true, // Allow null for backward compatibility
   },
   location: {
     type: DataTypes.STRING,
@@ -333,7 +389,8 @@ const models = [
   Gallery,
   History,
   News,
-  Slider
+  Slider,
+  ChampionshipStats
 ];
 
 // Apply MSSQL-specific configurations to all models
@@ -373,5 +430,6 @@ module.exports = {
   History,
   Content,
   Event,
-  Gallery
+  Gallery,
+  ChampionshipStats
 };

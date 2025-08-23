@@ -38,11 +38,14 @@ exports.createEvent = async (req, res) => {
       return res.status(400).json({ message: 'Title is required' });
     }
 
+    // Create the data object with all fields
     const data = {
       ...req.body,
       imageUrl: getFullUrl(req, `/uploads/events/${req.file.filename}`),
       isActive: true
     };
+    
+    console.log('Event data:', data);
 
     console.log('Creating event with data:', data);
 
@@ -59,6 +62,8 @@ exports.updateEvent = async (req, res) => {
   try {
     console.log('Update request file:', req.file);
     console.log('Update request body:', req.body);
+    console.log('Update request body date:', req.body.date, typeof req.body.date);
+    console.log('Update request body endDate:', req.body.endDate, typeof req.body.endDate);
 
     const event = await Event.findByPk(req.params.id);
     if (!event) {
@@ -69,7 +74,12 @@ exports.updateEvent = async (req, res) => {
       return res.status(400).json({ message: 'Title is required' });
     }
 
-    const data = { ...req.body };
+    // Create the data object with all fields
+    const data = {
+      ...req.body
+    };
+    
+    console.log('Event update data:', data);
 
     // Only update imageUrl if a new file was uploaded
     if (req.file) {
