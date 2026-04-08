@@ -113,7 +113,7 @@ const Contact = sequelize.define('Contact', {
     type: DataTypes.STRING(1000),
     allowNull: true,
   },
-}, { 
+}, {
   timestamps: false,
 });
 
@@ -182,7 +182,7 @@ const User = sequelize.define('User', {
 });
 
 // Add instance method to compare password
-User.prototype.matchPassword = async function(enteredPassword) {
+User.prototype.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
@@ -270,28 +270,50 @@ const Event = sequelize.define('Event', {
   },
 });
 
-const Gallery = sequelize.define('Gallery', {
+const GalleryFolder = sequelize.define('GalleryFolder', {
+  folderName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  imageUrl: {
+  coverImage: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   description: {
     type: DataTypes.STRING(DataTypes.MAX),
-    allowNull: true,
-  },
-  category: {
-    type: DataTypes.STRING,
     allowNull: true,
   },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+}, {
+  tableName: 'gallery_folders',
+  underscored: true
 });
+
+const GalleryImage = sequelize.define('GalleryImage', {
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  order: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+  },
+}, {
+  tableName: 'gallery_images',
+  underscored: true
+});
+
+// Associations
+GalleryFolder.hasMany(GalleryImage, { as: 'images', foreignKey: 'folder_id', onDelete: 'CASCADE' });
+GalleryImage.belongsTo(GalleryFolder, { foreignKey: 'folder_id' });
 
 const History = sequelize.define('History', {
   title: {
@@ -386,7 +408,8 @@ const models = [
   WhatIsGymkhana,
   Content,
   Event,
-  Gallery,
+  GalleryFolder,
+  GalleryImage,
   History,
   News,
   Slider,
@@ -409,7 +432,7 @@ const testConnection = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
-    
+
     // Sync all models
     // Note: In production, you might want to use migrations instead
     await sequelize.sync({ alter: true });
@@ -430,6 +453,7 @@ module.exports = {
   History,
   Content,
   Event,
-  Gallery,
+  GalleryFolder,
+  GalleryImage,
   ChampionshipStats
 };
