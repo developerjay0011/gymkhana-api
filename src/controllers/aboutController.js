@@ -67,9 +67,12 @@ exports.createAbout = async (req, res) => {
 // Update about content
 exports.updateAbout = async (req, res) => {
   try {
-    console.log('Update About - Body:', req.body);
-    console.log('Update About - Files:', req.files);
-    console.log('Update About - ID:', req.params.id);
+    console.log('--- Update About Debug ---');
+    console.log('Method:', req.method);
+    console.log('Content-Type:', req.headers['content-type']);
+    console.log('Body:', req.body);
+    console.log('Files:', req.files ? Object.keys(req.files) : 'None');
+    console.log('ID:', req.params.id);
 
     const about = await About.findByPk(req.params.id);
     if (!about) {
