@@ -112,7 +112,7 @@ exports.updateAbout = async (req, res) => {
     res.json(about);
   } catch (error) {
     console.error('Error in updateAbout:', error);
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message, stack: error.stack });
   }
 };
 
