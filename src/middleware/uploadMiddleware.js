@@ -46,7 +46,7 @@ const createUpload = (type) => multer({
   storage: createStorage(type),
   fileFilter: fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 50 * 1024 * 1024 // 50MB limit
   }
 });
 
@@ -57,6 +57,7 @@ const eventsUpload = createUpload('events');
 const galleryUpload = createUpload('gallery');
 const historyUpload = createUpload('history');
 const regulationsUpload = createUpload('regulations');
+const aboutUpload = createUpload('about');
 
 // Helper function to get full URL
 const getFullUrl = (req, path) => {
@@ -70,5 +71,6 @@ module.exports = {
   regulationsUpload,
   galleryUpload,
   historyUpload,
+  aboutUpload,
   getFullUrl
 };

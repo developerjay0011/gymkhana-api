@@ -1,4 +1,5 @@
 const { About } = require('../models');
+const { getFullUrl } = require('../middleware/uploadMiddleware');
 
 // Get about content
 exports.getAboutContent = async (req, res) => {
@@ -29,12 +30,25 @@ exports.getAboutById = async (req, res) => {
 exports.createAbout = async (req, res) => {
   try {
     // Validate required fields
-    const { title, content } = req.body;
-    if (!title || !content) {
-      return res.status(400).json({ message: 'Title and content are required' });
+    const { title, whatis } = req.body;
+    if (!title || !whatis) {
+      return res.status(400).json({ message: 'Title and content (whatis) are required' });
     }
 
-    const about = await About.create(req.body);
+    const data = { ...req.body };
+
+    // Handle images
+    if (req.files) {
+      const imageFields = ['coordinator_image', 'director_image', 'assistant_image', 'deputy_director_image'];
+      imageFields.forEach(field => {
+        if (req.files[field] && req.files[field][0]) {
+          const imagePath = `/uploads/about/${req.files[field][0].filename}`;
+          data[field] = getFullUrl(req, imagePath);
+        }
+      });
+    }
+
+    const about = await About.create(data);
     res.status(201).json(about);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -55,7 +69,20 @@ exports.updateAbout = async (req, res) => {
       return res.status(400).json({ message: 'Title and What Is sections are required' });
     }
 
-    await about.update(req.body);
+    const data = { ...req.body };
+
+    // Handle images
+    if (req.files) {
+      const imageFields = ['coordinator_image', 'director_image', 'assistant_image', 'deputy_director_image'];
+      imageFields.forEach(field => {
+        if (req.files[field] && req.files[field][0]) {
+          const imagePath = `/uploads/about/${req.files[field][0].filename}`;
+          data[field] = getFullUrl(req, imagePath);
+        }
+      });
+    }
+
+    await about.update(data);
     res.json(about);
   } catch (error) {
     res.status(400).json({ message: error.message });

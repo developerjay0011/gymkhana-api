@@ -39,6 +39,22 @@ const About = sequelize.define('About', {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
+  coordinator_image: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  director_image: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  assistant_image: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  deputy_director_image: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
