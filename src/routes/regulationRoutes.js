@@ -61,16 +61,19 @@ router.put('/categories/:id', protect, async (req, res) => {
 
 router.delete('/categories/:id', protect, async (req, res) => {
   try {
-    const deleted = await RegulationCategory.destroy({
-      where: { id: req.params.id }
-    });
-    if (!deleted) {
+    const category = await RegulationCategory.findByPk(req.params.id);
+    if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
-    // Delete all regulations in this category
+
+    // 1. Delete all regulations in this category first to avoid FK constraint conflict
     await Regulation.destroy({
       where: { categoryId: req.params.id }
     });
+
+    // 2. Now delete the category
+    await category.destroy();
+
     res.json({ message: 'Category deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
