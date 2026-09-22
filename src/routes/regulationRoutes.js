@@ -99,7 +99,7 @@ router.put('/regulations/:id', protect, regulationsUpload.single('document'), as
     if (req.file) {
       updateData.documentUrl = `/uploads/regulations/${req.file.filename}`;
     }
-    
+
     const [updated] = await Regulation.update(updateData, {
       where: { id: req.params.id }
     });
@@ -133,3 +133,4 @@ router.delete('/regulations/:id', protect, async (req, res) => {
 });
 
 module.exports = router;
+

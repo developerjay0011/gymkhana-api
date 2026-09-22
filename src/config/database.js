@@ -31,17 +31,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     timestamps: true,
     underscored: true
   },
-  hooks: {
-    beforeDefine: (attributes, options) => {
-      // Convert all TEXT fields to NVARCHAR(MAX)
-      for (const key in attributes) {
-        if (attributes[key].type instanceof DataTypes.TEXT || 
-            attributes[key].type instanceof DataTypes.STRING && attributes[key].type._length === undefined) {
-          attributes[key].type = DataTypes.STRING(DataTypes.MAX);
-        }
-      }
-    }
-  },
   logging: console.log // For debugging
 });
 

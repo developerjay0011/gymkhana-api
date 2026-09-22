@@ -58,6 +58,7 @@ const galleryUpload = createUpload('gallery');
 const historyUpload = createUpload('history');
 const regulationsUpload = createUpload('regulations');
 const aboutUpload = createUpload('about');
+const driverUpload = createUpload('drivers');
 
 // Helper function to get full URL
 const getFullUrl = (req, path) => {
@@ -72,5 +73,6 @@ module.exports = {
   galleryUpload,
   historyUpload,
   aboutUpload,
+  driverUpload,
   getFullUrl
 };

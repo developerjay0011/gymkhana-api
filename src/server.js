@@ -17,25 +17,74 @@ async function initializeDatabase() {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
     
-    // Instead of using alter:true which causes syntax errors in MSSQL,
-    // we'll use direct SQL queries to add the missing columns
-    // try {
-      // Add deputy_director column to abouts table if it doesn't exist
-    //   await sequelize.query(
-    //     `IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'abouts' AND COLUMN_NAME = 'deputy_director')
-    //     ALTER TABLE [abouts] ADD [deputy_director] NVARCHAR(255) NULL;`
-    //   );
-      
-    //   // Add end_date column to events table if it doesn't exist
-    //   await sequelize.query(
-    //     `IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'events' AND COLUMN_NAME = 'end_date')
-    //     ALTER TABLE [events] ADD [end_date] DATETIME NULL;`
-    //   );
-      
-    //   console.log('Database tables have been updated with new columns');
-    // } catch (error) {
-    //   console.error('Error updating database schema:', error);
-    // }
+    try {
+      // Ensure text columns in MSSQL use NVARCHAR(MAX) to prevent truncation errors
+      await sequelize.query(`
+        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'news' AND COLUMN_NAME = 'content' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
+        BEGIN
+          ALTER TABLE [news] ALTER COLUMN [content] NVARCHAR(MAX) NOT NULL;
+        END
+
+        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'events' AND COLUMN_NAME = 'description' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
+        BEGIN
+          ALTER TABLE [events] ALTER COLUMN [description] NVARCHAR(MAX) NOT NULL;
+        END
+
+        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'contents' AND COLUMN_NAME = 'content' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
+        BEGIN
+          ALTER TABLE [contents] ALTER COLUMN [content] NVARCHAR(MAX) NOT NULL;
+        END
+
+        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'messages' AND COLUMN_NAME = 'message' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
+        BEGIN
+          ALTER TABLE [messages] ALTER COLUMN [message] NVARCHAR(MAX) NOT NULL;
+        END
+
+        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'gallery_folders' AND COLUMN_NAME = 'description' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
+        BEGIN
+          ALTER TABLE [gallery_folders] ALTER COLUMN [description] NVARCHAR(MAX) NULL;
+        END
+
+        IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'communities')
+        BEGIN
+          CREATE TABLE [communities] (
+            [id] INT IDENTITY(1,1) PRIMARY KEY,
+            [name] NVARCHAR(255) NOT NULL,
+            [email] NVARCHAR(255) NOT NULL,
+            [instagram] NVARCHAR(255) NULL,
+            [is_active] BIT DEFAULT 1,
+            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE(),
+            [updated_at] DATETIME2 NOT NULL DEFAULT GETDATE()
+          );
+        END
+
+        IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'drivers')
+        BEGIN
+          CREATE TABLE [drivers] (
+            [id] INT IDENTITY(1,1) PRIMARY KEY,
+            [full_name] NVARCHAR(255) NOT NULL,
+            [date_of_birth] NVARCHAR(50) NOT NULL,
+            [nationality] NVARCHAR(100) NOT NULL,
+            [gender] NVARCHAR(20) NOT NULL,
+            [phone_number] NVARCHAR(50) NOT NULL,
+            [email] NVARCHAR(255) NOT NULL,
+            [social_media] NVARCHAR(255) NULL,
+            [asn_name] NVARCHAR(255) NULL,
+            [asn_country] NVARCHAR(100) NULL,
+            [interested_in_aagc] BIT DEFAULT 0,
+            [has_motorsport_history] BIT DEFAULT 0,
+            [profile_photo] NVARCHAR(1000) NULL,
+            [status] NVARCHAR(50) DEFAULT 'pending',
+            [is_active] BIT DEFAULT 1,
+            [created_at] DATETIME2 NOT NULL DEFAULT GETDATE(),
+            [updated_at] DATETIME2 NOT NULL DEFAULT GETDATE()
+          );
+        END
+      `);
+      console.log('Database columns verified/updated to NVARCHAR(MAX)');
+    } catch (schemaErr) {
+      console.error('Error updating column data types:', schemaErr.message);
+    }
 
     // Create default admin user
     // const { User, About, Contact, History, Slider, WhatIsGymkhana } = require('./models');
@@ -162,6 +211,8 @@ const contactRoutes = require('./routes/contactRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const regulationRoutes = require('./routes/regulationRoutes');
 const championshipStatsRoutes = require('./routes/championshipStatsRoutes');
+const communityRoutes = require('./routes/communityRoutes');
+const driverRoutes = require('./routes/driverRoutes');
 
 // API routes
 app.use('/api/users', userRoutes);
@@ -178,6 +229,9 @@ app.use('/api/history', historyRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/regulations', regulationRoutes);
 app.use('/api/championship-stats', championshipStatsRoutes);
+app.use('/api/community', communityRoutes);
+app.use('/api/drivers', driverRoutes);
+app.use('/api/driver', driverRoutes);
 
 // Error handling middleware
 app.use(notFound);

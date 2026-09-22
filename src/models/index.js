@@ -151,7 +151,7 @@ const Message = sequelize.define('Message', {
     allowNull: false,
   },
   message: {
-    type: DataTypes.STRING(DataTypes.MAX),
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   status: {
@@ -242,7 +242,7 @@ const Content = sequelize.define('Content', {
     allowNull: false,
   },
   content: {
-    type: DataTypes.STRING(DataTypes.MAX),
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   type: {
@@ -261,7 +261,7 @@ const Event = sequelize.define('Event', {
     allowNull: false,
   },
   description: {
-    type: DataTypes.STRING(DataTypes.MAX),
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   date: {
@@ -300,7 +300,7 @@ const GalleryFolder = sequelize.define('GalleryFolder', {
     allowNull: true,
   },
   description: {
-    type: DataTypes.STRING(DataTypes.MAX),
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   isActive: {
@@ -367,7 +367,7 @@ const News = sequelize.define('News', {
     allowNull: false,
   },
   content: {
-    type: DataTypes.STRING(DataTypes.MAX),
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   date: {
@@ -412,6 +412,96 @@ const Slider = sequelize.define('Slider', {
   underscored: true
 });
 
+const Community = sequelize.define('Community', {
+  name: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    validate: {
+      isEmail: true,
+    },
+  },
+  instagram: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+}, {
+  tableName: 'communities',
+  underscored: true,
+});
+
+const Driver = sequelize.define('Driver', {
+  fullName: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  dateOfBirth: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+  },
+  nationality: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+  },
+  gender: {
+    type: DataTypes.STRING(20),
+    allowNull: false,
+  },
+  phoneNumber: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    validate: {
+      isEmail: true,
+    },
+  },
+  socialMedia: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  asnName: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  asnCountry: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
+  interestedInAagc: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  hasMotorsportHistory: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  profilePhoto: {
+    type: DataTypes.STRING(1000),
+    allowNull: true,
+  },
+  status: {
+    type: DataTypes.STRING(50),
+    defaultValue: 'pending',
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+}, {
+  tableName: 'drivers',
+  underscored: true,
+});
+
 // Model associations can be defined here if needed
 // Example: User.hasMany(Message)
 
@@ -429,19 +519,12 @@ const models = [
   History,
   News,
   Slider,
-  ChampionshipStats
+  ChampionshipStats,
+  Community,
+  Driver
 ];
 
-// Apply MSSQL-specific configurations to all models
-models.forEach(model => {
-  // Configure text fields to use NVARCHAR(MAX) instead of TEXT
-  Object.keys(model.rawAttributes).forEach(attribute => {
-    const attr = model.rawAttributes[attribute];
-    if (attr.type instanceof DataTypes.TEXT) {
-      attr.type = DataTypes.STRING(DataTypes.MAX);
-    }
-  });
-});
+
 
 // Test database connection
 const testConnection = async () => {
@@ -471,5 +554,7 @@ module.exports = {
   Event,
   GalleryFolder,
   GalleryImage,
-  ChampionshipStats
+  ChampionshipStats,
+  Community,
+  Driver
 };
