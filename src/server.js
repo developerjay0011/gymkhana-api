@@ -156,7 +156,7 @@ initializeDatabase();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3003', 'http://localhost:3001', 'http://localhost:3000', 'https://gmk.chronopulse.com', 'https://gmk-web-api.chronopulse.com', 'https://admingmk.chronopulse.com'],
+  origin: ['http://localhost:3003', 'http://localhost:3001', 'http://localhost:3000', 'https://gmk.chronopulse.com', 'https://gmk-web-api.chronopulse.com', 'https://admingmk.chronopulse.com', 'https://aagc.info'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
