@@ -16,35 +16,10 @@ async function initializeDatabase() {
   try {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
-    
+
     try {
       // Ensure text columns in MSSQL use NVARCHAR(MAX) to prevent truncation errors
       await sequelize.query(`
-        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'news' AND COLUMN_NAME = 'content' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
-        BEGIN
-          ALTER TABLE [news] ALTER COLUMN [content] NVARCHAR(MAX) NOT NULL;
-        END
-
-        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'events' AND COLUMN_NAME = 'description' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
-        BEGIN
-          ALTER TABLE [events] ALTER COLUMN [description] NVARCHAR(MAX) NOT NULL;
-        END
-
-        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'contents' AND COLUMN_NAME = 'content' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
-        BEGIN
-          ALTER TABLE [contents] ALTER COLUMN [content] NVARCHAR(MAX) NOT NULL;
-        END
-
-        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'messages' AND COLUMN_NAME = 'message' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
-        BEGIN
-          ALTER TABLE [messages] ALTER COLUMN [message] NVARCHAR(MAX) NOT NULL;
-        END
-
-        IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'gallery_folders' AND COLUMN_NAME = 'description' AND (CHARACTER_MAXIMUM_LENGTH != -1 OR DATA_TYPE != 'nvarchar'))
-        BEGIN
-          ALTER TABLE [gallery_folders] ALTER COLUMN [description] NVARCHAR(MAX) NULL;
-        END
-
         IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'communities')
         BEGIN
           CREATE TABLE [communities] (
@@ -88,7 +63,7 @@ async function initializeDatabase() {
 
     // Create default admin user
     // const { User, About, Contact, History, Slider, WhatIsGymkhana } = require('./models');
-    
+
     // await User.create({
     //   username: 'admin',
     //   password: 'admin123',
@@ -148,7 +123,7 @@ async function initializeDatabase() {
     //   { title: '2nd Taipei International Gymkhana Prize (Taipei)', description: 'Asia Auto Gymkhana competition in 2 countries recognized as FIA Auto Slalom World Championship.', year: 2024, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038414014-222074404.jpg', isActive: true, order: 8 },
     //   { title: 'Asia Auto Gymkhana competition in 5 countries', description: 'Asia Auto Gymkhana competition in 5 countries.', year: 2025, imageUrl: 'https://gmk-web-api.chronopulse.com/uploads/history/1751038442679-110128404.jpg', isActive: true, order: 9 }
     // ];
-    
+
     // await History.bulkCreate(histories);
     // console.log('History data seeded');
 
@@ -181,7 +156,7 @@ initializeDatabase();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3003','http://localhost:3001','http://localhost:3000','https://gmk.chronopulse.com','https://gmk-web-api.chronopulse.com','https://admingmk.chronopulse.com'],
+  origin: ['http://localhost:3003', 'http://localhost:3001', 'http://localhost:3000', 'https://gmk.chronopulse.com', 'https://gmk-web-api.chronopulse.com', 'https://admingmk.chronopulse.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
